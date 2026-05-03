@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI-powered Python code quality analyzer. Get instant ratings, metrics, AI suggestions, and improved code.">
+    <title>AI Code Reviewer — Python Code Quality Analyzer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <!-- ═══════ BACKGROUND EFFECTS ═══════ -->
+    <div class="bg-effects">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+        <div class="grid-overlay"></div>
+    </div>
+
+    <!-- ═══════ MAIN CONTAINER ═══════ -->
+    <div class="container">
+
+        <!-- ═══════ HEADER ═══════ -->
+        <header class="header" id="header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-icon">
+                        <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+                            <path d="M18 2L33 10V26L18 34L3 26V10L18 2Z" stroke="url(#logoGrad)" stroke-width="2" fill="none"/>
+                            <path d="M12 16L16 20L24 12" stroke="url(#logoGrad)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <defs>
+                                <linearGradient id="logoGrad" x1="3" y1="2" x2="33" y2="34">
+                                    <stop stop-color="#7c3aed"/>
+                                    <stop offset="1" stop-color="#3b82f6"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="logo-text">AI Code Reviewer</h1>
+                        <p class="logo-sub">Python Quality Analysis · ML + AI Powered</p>
+                    </div>
+                </div>
+                <button class="btn btn-ghost" id="historyToggle" onclick="toggleHistory()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/></svg>
+                    History
+                </button>
+            </div>
+        </header>
+
+        <!-- ═══════ MAIN LAYOUT ═══════ -->
+        <main class="main-layout">
+
+            <!-- ════ TAB NAVIGATION ════ -->
+            <div class="tab-navigation" id="tabNavigation">
+                <button class="tab-btn active" id="tabBtnAnalyze" onclick="switchTab('analyze')">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                    Analyze
+                </button>
+                <button class="tab-btn" id="tabBtnDebug" onclick="switchTab('debug')">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22c1.1 0 2-.9 2-2h-4a2 2 0 002 2z"/><path d="M8 2v2"/><path d="M16 2v2"/><path d="M12 6a6 6 0 016 6v4H6v-4a6 6 0 016-6z"/><path d="M4 12H2"/><path d="M22 12h-2"/><path d="M12 6V4"/></svg>
+                    Debug
+                </button>
+                <div class="tab-indicator" id="tabIndicator"></div>
+            </div>
+
+            <!-- ════════════════════════════════════════════════ -->
+            <!-- TAB 1: ANALYZE                                  -->
+            <!-- ════════════════════════════════════════════════ -->
+            <div class="tab-content active" id="tabAnalyze">
+
+                <!-- Code Input -->
+                <section class="input-section glass-panel" id="inputSection">
+                    <div class="section-header">
+                        <h2>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16,18 22,12 16,6"/><polyline points="8,6 2,12 8,18"/></svg>
+                            Paste Your Python Function
+                        </h2>
+                        <span class="badge badge-info">Python Only</span>
+                    </div>
+                    <div class="code-editor-wrapper">
+                        <div class="editor-toolbar">
+                            <div class="editor-dots">
+                                <span class="dot dot-red"></span>
+                                <span class="dot dot-yellow"></span>
+                                <span class="dot dot-green"></span>
+                            </div>
+                            <span class="editor-label">main.py</span>
+                            <button class="btn btn-sm btn-ghost" onclick="clearCode('analyze')" title="Clear">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+                            </button>
+                        </div>
+                        <textarea id="codeInput" class="code-editor" placeholder="def calculate_fibonacci(n):
+    &quot;&quot;&quot;Calculate the nth Fibonacci number.&quot;&quot;&quot;
+    if n <= 1:
+        return n
+    a, b = 0, 1
+    for _ in range(2, n + 1):
+        a, b = b, a + b
+    return b" spellcheck="false"></textarea>
+                    </div>
+
+                    <!-- Validation Error Banner (Analyze) -->
+                    <div class="validation-error-banner" id="analyzeErrorBanner" style="display:none;">
+                        <div class="error-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                        </div>
+                        <div class="error-details">
+                            <span class="error-title">Validation Error</span>
+                            <span class="error-message" id="analyzeErrorMsg"></span>
+                        </div>
+                    </div>
+
+                    <div class="input-actions">
+                        <button class="btn btn-primary btn-lg" id="analyzeBtn" onclick="analyzeCode()">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                            Analyze Code
+                        </button>
+                        <button class="btn btn-ghost btn-lg" onclick="loadSample('analyze')">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                            Load Sample
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Loading State -->
+                <section class="loading-section" id="loadingSection" style="display:none;">
+                    <div class="glass-panel loading-panel">
+                        <div class="loading-spinner">
+                            <div class="spinner-ring"></div>
+                            <div class="spinner-ring"></div>
+                            <div class="spinner-ring"></div>
+                        </div>
+                        <h3 class="loading-text">Analyzing your code...</h3>
+                        <div class="loading-steps">
+                            <div class="loading-step active" id="step1">
+                                <span class="step-icon">📊</span> Extracting metrics
+                            </div>
+                            <div class="loading-step" id="step2">
+                                <span class="step-icon">🤖</span> ML prediction
+                            </div>
+                            <div class="loading-step" id="step3">
+                                <span class="step-icon">🧠</span> AI suggestions
+                            </div>
+                            <div class="loading-step" id="step4">
+                                <span class="step-icon">📝</span> Generating diff
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Results Section -->
+                <section class="results-section" id="resultsSection" style="display:none;">
+
+                    <!-- Rating + Score Row -->
+                    <div class="results-top-row">
+                        <div class="glass-panel rating-card" id="ratingCard">
+                            <div class="rating-badge" id="ratingBadge">
+                                <span class="rating-label" id="ratingLabel">Good</span>
+                            </div>
+                            <div class="rating-info">
+                                <span class="rating-title">Quality Rating</span>
+                                <span class="rating-desc" id="ratingDesc">Your code meets high quality standards</span>
+                            </div>
+                        </div>
+                        <div class="glass-panel score-card">
+                            <div class="score-gauge">
+                                <svg viewBox="0 0 120 120" class="gauge-svg">
+                                    <circle cx="60" cy="60" r="52" class="gauge-bg"/>
+                                    <circle cx="60" cy="60" r="52" class="gauge-fill" id="gaugeFill"/>
+                                </svg>
+                                <div class="score-value" id="scoreValue">0</div>
+                            </div>
+                            <span class="score-label">out of 10</span>
+                        </div>
+                    </div>
+
+                    <!-- Metrics Grid -->
+                    <div class="glass-panel metrics-panel">
+                        <div class="section-header">
+                            <h2>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                                Metrics Breakdown
+                            </h2>
+                        </div>
+                        <div class="metrics-grid" id="metricsGrid">
+                            <!-- Filled by JS -->
+                        </div>
+                    </div>
+
+                    <!-- AI Suggestions -->
+                    <div class="glass-panel suggestions-panel">
+                        <div class="section-header">
+                            <h2>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                                AI Suggestions
+                            </h2>
+                            <span class="badge badge-ai">Grok AI</span>
+                        </div>
+                        <div class="suggestions-content" id="suggestionsContent">
+                            <!-- Filled by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Improved Code -->
+                    <div class="glass-panel improved-panel">
+                        <div class="section-header">
+                            <h2>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                                Improved Code
+                            </h2>
+                            <button class="btn btn-sm btn-ghost" onclick="copyImprovedCode()" title="Copy">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                                Copy
+                            </button>
+                        </div>
+                        <div class="code-block">
+                            <pre><code id="improvedCodeContent"></code></pre>
+                        </div>
+                    </div>
+
+                    <!-- Diff View -->
+                    <div class="glass-panel diff-panel">
+                        <div class="section-header">
+                            <h2>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18m-7-7l7 7 7-7"/></svg>
+                                Code Diff
+                            </h2>
+                            <div class="diff-legend">
+                                <span class="legend-item legend-add">+ Added</span>
+                                <span class="legend-item legend-remove">− Removed</span>
+                            </div>
+                        </div>
+                        <div class="diff-content" id="diffContent">
+                            <!-- Filled by JS -->
+                        </div>
+                    </div>
+
+                </section>
+            </div>
+
+            <!-- ════════════════════════════════════════════════ -->
+            <!-- TAB 2: DEBUG                                    -->
+            <!-- ════════════════════════════════════════════════ -->
+            <div class="tab-content" id="tabDebug">
+
+                <!-- Code Input -->
+                <section class="input-section glass-panel" id="debugInputSection">
+                    <div class="section-header">
+                        <h2>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16,18 22,12 16,6"/><polyline points="8,6 2,12 8,18"/></svg>
+                            Paste Your Python Code
+                        </h2>
+                        <span class="badge badge-debug">Debug Mode</span>
+                    </div>
+                    <div class="code-editor-wrapper">
+                        <div class="editor-toolbar">
+                            <div class="editor-dots">
+                                <span class="dot dot-red"></span>
+                                <span class="dot dot-yellow"></span>
+                                <span class="dot dot-green"></span>
+                            </div>
+                            <span class="editor-label">debug.py</span>
+                            <button class="btn btn-sm btn-ghost" onclick="clearCode('debug')" title="Clear">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+                            </button>
+                        </div>
+                        <textarea id="debugCodeInput" class="code-editor" placeholder="def my_function(x):
+    # Paste code here to check for errors
+    return x * 2" spellcheck="false"></textarea>
+                    </div>
+                    <div class="input-actions">
+                        <button class="btn btn-debug btn-lg" id="debugBtn" onclick="debugCode()">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22c1.1 0 2-.9 2-2h-4a2 2 0 002 2z"/><path d="M8 2v2"/><path d="M16 2v2"/><path d="M12 6a6 6 0 016 6v4H6v-4a6 6 0 016-6z"/></svg>
+                            Check for Errors
+                        </button>
+                        <button class="btn btn-ghost btn-lg" onclick="loadSample('debug')">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                            Load Sample
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Debug Result -->
+                <section class="debug-result-section" id="debugResultSection" style="display:none;">
+                    <div class="glass-panel debug-result-panel" id="debugResultPanel">
+                        <!-- Filled by JS — either success or error -->
+                    </div>
+                </section>
+            </div>
+
+        </main>
+
+        <!-- ═══════ HISTORY SIDEBAR ═══════ -->
+        <aside class="history-sidebar" id="historySidebar">
+            <div class="sidebar-header">
+                <h3>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/></svg>
+                    Review History
+                </h3>
+                <button class="btn btn-sm btn-ghost" onclick="toggleHistory()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <div class="sidebar-content" id="historyList">
+                <div class="history-empty">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.3"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+                    <p>No reviews yet</p>
+                </div>
+            </div>
+        </aside>
+
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
